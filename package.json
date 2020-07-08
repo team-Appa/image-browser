@@ -46,6 +46,7 @@
     "faker": "^4.1.0",
     "mongoose": "^4.13.20",
     "nodemon": "^2.0.4",
+    "pg": "^8.2.2",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-modal-image": "^2.5.0",

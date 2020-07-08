@@ -2,7 +2,7 @@ const faker = require('faker');
 const db = require('./index.js');
 const Product = require('./model.js');
 
-const numOfDataPoints = 100;
+const numOfDataPoints = 3;
 
 var generateEntry = function(numOfVariations, newId) {
 
@@ -59,7 +59,7 @@ var seedDatabase = function() {
   }
 
   Product.create(sampleData)
-    .then(() => db.disconnect())
+    .then(() => db.close())
     .catch((error) => console.log(error));
 }
 
