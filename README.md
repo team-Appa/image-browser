@@ -32,6 +32,22 @@ Within the root directory:
 npm install
 ```
 
+### Generate Data
+
+Within the root directory:
+
+```sh
+npm run data
+```
+
+### Seed 10 million
+
+Within the root directory:
+
+```sh
+npm run load
+```
+
 ### Seed DB
 
 Within the root directory:
