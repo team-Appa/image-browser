@@ -6,8 +6,8 @@ const writeProducts = fs.createWriteStream(__dirname + '/data/products.csv');
 const writeImages = fs.createWriteStream(__dirname + '/data/variations.csv');
 
 ( async ()=>{
-  await primary(writeProducts, 'utf8', () => writeProducts.end() )
-  await secondary(writeImages, 'utf8', () => writeImages.end() )
+  await primary( writeProducts, 'utf8', () => writeProducts.end() )
+  await secondary( writeImages, 'utf8', () => writeImages.end() )
 })()
 
 

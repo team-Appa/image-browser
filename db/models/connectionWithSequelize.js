@@ -1,5 +1,5 @@
-const Sequelize = require('sequelize');
-const credentials = require('../credentials')
+const {Sequelize, QueryTypes } = require('sequelize');
+const credentials = require('../seedData/credentials')
 
 const sequelize = new Sequelize('products', credentials.username, credentials.password, {
   host: 'localhost',

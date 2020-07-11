@@ -1,5 +1,5 @@
 const { Pool, Client } = require('pg')
-const credentials = require('../credentials')
+const credentials = require('../seedData/credentials')
 
 const pool = new Client({
   user: credentials.username,
@@ -8,6 +8,5 @@ const pool = new Client({
   password: credentials.password,
   port: 5432,
 })
-
 
 module.exports = pool

@@ -3,12 +3,13 @@ const faker = require('faker');
 function writeTenMillionProducts(writer, encoding, callback) {
   writer.write('title,description,rating\n', 'utf8');
 
-  // let i = 10000000;
-  let i = 100;
+  let i = 10000000;
+  // let i = 100000;
   let data = '';
   var title = '';
   var description = '';
   var rating = 0;
+
 
   write();
   function write() {
