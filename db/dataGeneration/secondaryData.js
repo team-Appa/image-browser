@@ -3,8 +3,8 @@ const faker = require('faker');
 function writeTenMillionImages(writer, encoding, callback) {
   writer.write('productId,cost,color,image\n', 'utf8');
 
-  let i = 10000000;
-  // let i = 100000;
+  // let i = 10000000;
+  let i = 4000000;
   let count = 0
   let data = '';
   var cost = 0;
