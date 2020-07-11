@@ -5,7 +5,7 @@
   "main": "server/index.js",
   "scripts": {
     "data": "node db/dataGeneration/generate.js",
-    "loadPG": "node db/seedWithPostgres",
+    "loadPG": "node db/seedData/seedWithPostgres",
     "start": "nodemon ./server/index.js",
     "build": "webpack -d --watch",
     "test": "jest --detectOpenHandles",

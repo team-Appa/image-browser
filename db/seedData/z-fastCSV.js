@@ -1,3 +1,7 @@
+////////////////////////////////////////////////////////////
+/////////////////  TEST FILE ONLY //////////////////////////
+////////////////////////////////////////////////////////////
+
 var fs = require('fs');
 var csv = require('fast-csv');
 const path = require('path');
@@ -6,8 +10,6 @@ const pool = require('./connection.js')
 const filePath = path.resolve( __dirname, '../dataGeneration/data/products.csv')
 
 pool.connect().then(()=>{
-
-
   let counter = 0;
 
   let csvStream = csv.parseFile(filePath, { headers:true })
