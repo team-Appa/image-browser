@@ -4,7 +4,7 @@ const credentials = require('../seedData/credentials')
 const pool = new Client({
   user: credentials.username,
   host: credentials.server,
-  database: "products",
+  database: "product",
   password: credentials.password,
   port: 5432,
 })

@@ -17,10 +17,10 @@ client
   .connect()
   .then(() => {
     console.log("connected to template1")
-    return client.query("DROP DATABASE IF EXISTS products")
+    return client.query("DROP DATABASE IF EXISTS product")
   })
   .then(() => {
-    return client.query("CREATE DATABASE products")
+    return client.query("CREATE DATABASE product")
   })
   .then(() => {
     console.log("created products database and close connection")
@@ -30,7 +30,7 @@ client
     return connection.authenticate()
   })
   .then(()=>{
-    console.log("connected to products")
+    console.log("connected to product")
     ProductsModel = Products.factory(connection);
     ImagesModel = Images.factory(connection);
     ProductsModel.hasMany(ImagesModel)
@@ -39,12 +39,12 @@ client
   })
   .then(()=>{
     console.log("insert data into products Table")
-    const filePath = path.resolve( __dirname, '../dataGeneration/data/products.csv')
+    const filePath = path.resolve( __dirname, '../dataGenerationPG/data/products.csv')
     return connection.query(`COPY products (title, description, rating) FROM '${filePath}' DELIMITER ',' CSV HEADER`)
   })
   .then(()=>{
     console.log("insert data into images Table")
-    const filePath = path.resolve( __dirname, '../dataGeneration/data/variations.csv')
+    const filePath = path.resolve( __dirname, '../dataGenerationPG/data/variations.csv')
     return connection.query(`COPY images ("productId", cost, color, image) FROM '${filePath}' DELIMITER ',' CSV HEADER`)
   })
   .catch((err) => {

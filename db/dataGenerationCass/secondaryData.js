@@ -1,17 +1,18 @@
 const faker = require('faker');
 
 function writeTenMillionImages(writer, encoding, callback) {
-  writer.write('productId,cost,color,image\n', 'utf8');
+  writer.write('productId,id,cost,color,image\n', 'utf8');
 
-  // let i = 10000000;
-  let i = 4000000;
+  let i = 10000000;
+  // let i =  1000;
   let count = 0
   let data = '';
-  var cost = 0;
-  var color = '';
-  var image = '';
-  var productID = ''
-  var numOfVariations = 0;
+  let cost = 0;
+  let color = '';
+  let image = '';
+  let productID = ''
+  let id = 0
+  let numOfVariations = 0;
 
   write();
   function write() {
@@ -22,11 +23,12 @@ function writeTenMillionImages(writer, encoding, callback) {
       data = '';
       numOfVariations = Math.ceil((Math.random() * 4));
       for (let j = 0; j < numOfVariations; j ++){
+        id++
         productID = count;
         cost = faker.commerce.price();
         color = faker.commerce.color();
         image = createImage()
-        data += productID + ","+ cost + "," + color + "," + image + "\n"
+        data += productID + "," + id + ","+ cost + "," + color + "," + image + "\n"
       }
       if (i === 0) {
         writer.write(data, encoding, callback);

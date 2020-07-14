@@ -4,7 +4,7 @@
 
 var fs = require('fs');
 const path = require('path');
-const pool = require('./connection.js')
+const pool = require('./connectionWithPG.js')
 
 const filePath = path.resolve( __dirname, '../dataGeneration/data/variations.csv')
 

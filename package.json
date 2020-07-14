@@ -4,8 +4,10 @@
   "description": "GC clone item image browser & style selector service",
   "main": "server/index.js",
   "scripts": {
-    "data": "node db/dataGeneration/generate.js",
+    "dataPG": "node db/dataGenerationPG/generate.js",
+    "dataCass": "node db/dataGenerationCass/generate.js",
     "loadPG": "node db/seedData/seedWithPostgres",
+    "loadCass": "node db/seedData/seedWithCassandra",
     "start": "nodemon ./server/index.js",
     "build": "webpack -d --watch",
     "test": "jest --detectOpenHandles",
@@ -43,6 +45,7 @@
   "dependencies": {
     "axios": "^0.19.2",
     "babel-jest": "^26.1.0",
+    "cassandra-driver": "^4.5.2",
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "faker": "^4.1.0",
