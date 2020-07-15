@@ -47,6 +47,9 @@ client
     const filePath = path.resolve( __dirname, '../dataGenerationPG/data/variations.csv')
     return connection.query(`COPY images ("productId", cost, color, image) FROM '${filePath}' DELIMITER ',' CSV HEADER`)
   })
+  .then(()=>{
+    return connection.query(`CREATE INDEX idx_images_productId ON images("productId")`)
+  })
   .catch((err) => {
     console.log(err)
   })
