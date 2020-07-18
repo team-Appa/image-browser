@@ -1,0 +1,18 @@
+config:
+  target: 'http://localhost:3001'
+  http:
+    pool: 500
+  phases:
+    - duration: 300
+      arrivalRate: 1000
+  defaults:
+    headers:
+      x-my-service-auth: ''
+scenarios:
+  - flow:
+    - post:
+        url: "/api/products"
+        json:
+          title: "Harry Potter"
+          description: "harry.potter@alumni.hogwarts.ac.uk"
+          rating: 1.2

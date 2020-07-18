@@ -67,6 +67,15 @@ class ImageBrowser extends React.Component {
         // handle success
         //console.log(response.data[0]);
         const data = response.data[0];
+        console.log("dataaaaa", data)
+
+        console.log(data)
+        console.log(data.variations)
+        console.log(data.variations[0])
+        console.log(data.variations[0].images)
+        console.log(data.variations[0].images[this.state.imageIndex].src)
+        console.log("==================================================")
+
         this.setState({
           product: data,
           variations: data.variations,
@@ -75,6 +84,12 @@ class ImageBrowser extends React.Component {
           currentVariantsImages: data.variations[0].images,
           currentImageUrl: data.variations[0].images[this.state.imageIndex].src
         })
+
+        console.log("product", this.state.product)
+        console.log("variations", this.state.variations)
+        console.log("currentVariant", this.state.currentVariant)
+        console.log("currentVariantsImages", this.state.currentVariantsImages)
+        console.log("currentImageUrl", this.state.currentImageUrl)
       })
       .catch(function (error) {
         // handle error

@@ -1,126 +1,136 @@
+require('newrelic');
+const { QueryTypes } = require('sequelize');
+var cluster = require('cluster');
 const express = require('express');
 const cors = require('cors')
-const morgan = require('morgan');
 const path = require('path');
-const app = express();
-const Product = require('../db/model.js')
-const faker = require('faker');
+const connection = require('./connectionWithSequelize.js')
+const redis = require('redis');
+const morgan = require('morgan');
 
-const port = 3001;
+if (cluster.isMaster) {
+  var numWorkers = require('os').cpus().length;
 
-app.use(cors());
-app.use(morgan('dev'));
-app.use(express.json())
-app.use(express.static(path.join(__dirname, '/../dist')))
+  console.log('Master cluster setting up ' + numWorkers + ' workers...');
 
-app.get('/api/products', (req, res) => {
-  const id = req.query.id;
-  Product.find({id: id})
+  for(var i = 0; i < numWorkers; i++) {
+    cluster.fork();
+  }
+
+  cluster.on('online', function(worker) {
+    console.log('Worker ' + worker.process.pid + ' is online');
+  });
+
+  cluster.on('exit', function(worker, code, signal) {
+    console.log('Worker ' + worker.process.pid + ' died with code: ' + code + ', and signal: ' + signal);
+    console.log('Starting a new worker');
+    cluster.fork();
+  });
+
+} else {
+
+  // const REDIS_PORT = process.env.PORT || 6379;
+  // const client = redis.createClient(REDIS_PORT);
+  const app = express();
+  const port = 3001;
+
+  app.use(cors());
+  // app.use(morgan('dev'));
+
+  //cache middleware
+  function cache(req,res, next){
+    let id = req.query.id
+    client.get(id,(err, data)=>{
+      if (err) throw err;
+      if (data !== null){
+        // console.log("called cache")
+        res.send(data)
+      } else{
+        // console.log("called get")
+        get(req, res)
+      }
+    })
+  }
+
+  app.use(express.json())
+  app.use(express.static(path.join(__dirname, '/../dist')))
+  app.get('/api/products', (req,res)=>{
+  // const get = (req, res) => {
+    const id = req.query.id;
+    // connection.connection.query(`select * from products INNER JOIN images ON products.id = images."productId" where products.id =${id}`, { type: QueryTypes.SELECT })
+    // connection.connection.query(`select * from products where products.id = ${id}`, { type: QueryTypes.SELECT })
+    connection.ProductsModel.findAll({
+      where: { id : id },
+      include:[{
+        model: connection.ImagesModel, as: 'variations'
+      }]
+    })
     .then((product) => {
-      res.status(200).send(product);
+      let update = []
+      for (let i = 0; i < product[0].dataValues.variations.length; i++){
+        let tmp = product[0].dataValues.variations[i].image
+        update.push( { "src": tmp })
+        product[0].dataValues.variations[i].dataValues.images = update
+      }
+      // client.set(id.toString(), JSON.stringify(product));
+      res.status(200).send(product)
     })
-    .catch((error)=>{
-      res.status(404).send('get error')
+    .catch((err)=>{
+      res.status(404).send(err)
     })
-});
+  })
 
-app.post('/api/products', (req, res) => {
-  const body = req.body;
-  Product.count({})
-    .then((result)=>{
-      body.id = result + 1;
-      Product.create([body])
+  app.post('/api/products', (req, res) => {
+    let data = filterBody(req);
+    connection.ProductsModel.create(data)
+      .then((product)=>{
+        res.status(200).send(product)
+      })
+      .catch((err)=>{
+        res.status(400).send(err)
+      })
+    });
+
+    app.put('/api/products', (req, res) => {
+      const id = req.query.id;
+      let data = filterBody(req);
+      const filter = { id: id };
+      connection.ProductsModel.update(data,{
+        where: filter
+      })
       .then((product) => {
-        res.status(201).send(product);
+        res.status(200).send(product);
       })
       .catch((error)=>{
-        res.status(404).send('post error')
+        res.status(404).send('put error')
       })
-    })
-    .catch((error)=>{
-      res.status(404).send('post error')
-    })
-  });
+    });
 
-  app.put('/api/products', (req, res) => {
-    const id = req.query.id;
-    const update = req.body;
-    const filter = { id: id };
-    Product.findOneAndUpdate(filter, update, {
-      new: true
-    })
-    .then((product) => {
-      res.status(200).send(product);
-    })
-    .catch((error)=>{
-      res.status(404).send('put error')
-    })
-  });
-
-  app.delete('/api/products', (req, res) => {
-    const id = req.query.id;
-    Product.findOneAndRemove({id: id})
-    .then((product) => {
-      res.status(200).send(product);
-    })
-    .catch((error)=>{
-      res.status(404).send('delete error')
-    })
-  });
-
-  // var numOfVariations = Math.ceil((Math.random() * 4));
-  // let data =[]
-  // let sampleData = generateEntry(numOfVariations,result+1)
-  // data.push(sampleData);
+    app.delete('/api/products', (req, res) => {
+      const id = req.query.id;
+      const filter = { id: id };
+      connection.ProductsModel.destory({
+        where: filter
+      })
+      .then((product) => {
+        res.status(200).send(product);
+      })
+      .catch((error)=>{
+        res.status(404).send('delete error')
+      })
+    });
 
 
-  var generateEntry = function(numOfVariations, newId) {
-
-    var randomTitle = faker.commerce.productName();
-    var randomDescription = faker.lorem.paragraph();
-    var randomRating = Math.random() * 5;
-    var variations = [];
-  var imageCount = 1;
-
-  for (var i = 0; i < numOfVariations; i++) {
-    var randomColor = faker.commerce.color(); // Fender Stratocaster
-    var randomCost = faker.commerce.price(); // 492.00
-    var numOfImages = Math.ceil((Math.random() * 5));
-    var randomImages = [] // 4 random image urls
-
-    var createImage = function() {
-      var url = 'http://picsum.photos/seed/'
-      var urlend='/846/1038'
-      var randomNumber = Math.floor(Math.random() * 1000);
-      return url+randomNumber+urlend;
+    const filterBody = (req) =>{
+      return {
+        title: req.body.title,
+        description: req.body.description,
+        rating: req.body.rating
+      };
     }
 
-    for (var j = 0; j < numOfImages; j++) {
-      //var source = "https://picsum.photos/846/1038?random=" + imageCount;
-      var source = createImage();
-      randomImages.push({src: source})
-      imageCount++;
-    }
+  var server = app.listen(port, () => {console.log(`Listening at http://localhost:${port}`)});
 
-    var variation = {
-      color: randomColor,
-      cost: randomCost,
-      images: randomImages
-    }
-    variations.push(variation);
-  }
+  module.exports = server;
 
-  var entry = {
-    id: newId,
-    title: randomTitle,
-    description: randomDescription,
-    rating: randomRating.toFixed(2),
-    variations : variations
-  }
-  return entry;
 }
-
-
-var server = app.listen(port, () => {console.log(`Listening at http://localhost:${port}`)});
-
-module.exports = server;

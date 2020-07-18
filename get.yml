@@ -1,0 +1,13 @@
+config:
+  target: 'http://localhost:3001'
+  http:
+    pool: 20
+  phases:
+    - duration: 200
+      arrivalRate: 10
+scenarios:
+  - flow:
+      - loop:
+        - get:
+            url: "/api/products?id={{$randomNumber(1,10000000)}}"
+            count: 100
