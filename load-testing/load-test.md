@@ -18,17 +18,17 @@
 
 ## Sample Results:
 
-    Summary report @ 10:21:40(-0700) 2020-07-18
+    Summary report @ 11:14:13(-0700) 2020-07-18
       Scenarios launched:  2800
       Scenarios completed: 2800
       Requests completed:  280000
-      Mean response/sec: 592.94
+      Mean response/sec: 551.8
       Response time (msec):
-        min: 2.3
-        max: 5162.5
-        median: 2081.9
-        p95: 3171.1
-        p99: 3419.3
+        min: 1.5
+        max: 6460.7
+        median: 2466.9
+        p95: 3775.4
+        p99: 4322.8
       Scenario counts:
         0: 2800 (100%)
       Codes:
