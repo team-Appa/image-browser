@@ -6,28 +6,30 @@
       http:
         pool: 20
       phases:
-        - duration: 200
+        - duration: 280
           arrivalRate: 10
     scenarios:
       - flow:
-        - loop:
-          - get:
-            url: "/api/products?id={{$randomNumber(1,10000000)}}"
-                count: 100
+          - loop:
+            - get:
+                url: "/api/products?id={{$randomNumber(1,10000000)}}"
+            count: 100
 
 
 ## Sample Results:
 
-    Elapsed time: 9 minutes, 41 seconds
-      Scenarios launched:  0
-      Scenarios completed: 0
-      Requests completed:  5733
-      Mean response/sec: 577.36
+    Summary report @ 10:21:40(-0700) 2020-07-18
+      Scenarios launched:  2800
+      Scenarios completed: 2800
+      Requests completed:  280000
+      Mean response/sec: 592.94
       Response time (msec):
-        min: 3198.3
-        max: 3712.9
-        median: 3330.7
-        p95: 3581.6
-        p99: 3607.6
+        min: 2.3
+        max: 5162.5
+        median: 2081.9
+        p95: 3171.1
+        p99: 3419.3
+      Scenario counts:
+        0: 2800 (100%)
       Codes:
-        200: 5733
+        200: 280000
