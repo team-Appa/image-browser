@@ -35,11 +35,12 @@ if (cluster.isMaster) {
   const port = 3001;
 
   app.use(cors());
-  // app.use(morgan('dev'));
+ // app.use(morgan('dev'));
 
   //cache middleware
   function cache(req,res, next){
     let id = req.query.id
+    console.log("id", id)
     client.get(id,(err, data)=>{
       if (err) throw err;
       if (data !== null){
