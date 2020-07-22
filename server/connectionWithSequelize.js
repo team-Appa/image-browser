@@ -1,10 +1,11 @@
 const { Sequelize } = require('sequelize');
-const credentials = require('./credentials');
-const products = require ('../db/models/products.js')
-const images = require ('../db/models/images.js')
+const products = require ('../db/models/products.js');
+const images = require ('../db/models/images.js');
+const path = require('path');
+require('dotenv').config({  path: path.resolve(__dirname, '../.env') });
 
-const connection = new Sequelize('product', credentials.username, credentials.password, {
-  host: 'localhost',
+const connection = new Sequelize('product', process.env.DB_USER, process.env.DB_PASS, {
+  host: process.env.DB_HOST,
   dialect: 'postgres',
   logging: false,
   define: {
@@ -13,8 +14,8 @@ const connection = new Sequelize('product', credentials.username, credentials.pa
   pool: {
     max: 900,
     min: 0,
-    acquire: 30000,
-    idle: 10000
+    acquire: 3000,
+    idle: 1000
   }
 })
 
@@ -29,7 +30,7 @@ connection
     return connection.sync()
   })
   .catch((err)=> {
-    console.log("yoo", err);
+    console.log(err);
   });
 
 module.exports.ProductsModel = ProductsModel;

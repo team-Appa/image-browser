@@ -3,8 +3,13 @@
 node_modules/
 logs/
 .vscode
-products.csv
 variations.csv
+products.csv
 credentials.js
 *.csv
+*.log
+*.logs
+newrelic_agent.log
+newrelic_agent.log
 db/credentials.js
+.env

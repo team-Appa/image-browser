@@ -1,17 +1,26 @@
 const { Client } = require('pg')
 const path = require('path');
-const credentials = require('./credentials')
+require('dotenv').config({  path: path.resolve(__dirname, '../../.env') });
 const Products = require('../models/products.js');
 const Images = require('../models/images.js');
 const connection = require('../models/connectionWithSequelize.js');
 
 const client = new Client({
-  user: credentials.username,
-  host: credentials.server,
-  database: credentials.database,
-  password: credentials.password,
-  port: 5432,
+  user: process.env.DB_USER,
+  host: process.env.DB_HOST,
+  database: process.env.DB_DATA_TMP,
+  password: process.env.DB_PASS,
+  port: process.env.DB_PG_PORT,
 })
+
+const clientTwo = new Client({
+  user: process.env.DB_USER,
+  host: process.env.DB_HOST,
+  database: process.env.DB_DATA,
+  password: process.env.DB_PASS,
+  port: process.env.DB_PG_PORT,
+})
+
 
 client
   .connect()
@@ -38,14 +47,15 @@ client
     return connection.sync()
   })
   .then(()=>{
-    console.log("insert data into products Table")
+    console.log("insert data into products table")
     const filePath = path.resolve( __dirname, '../dataGenerationPG/data/products.csv')
-    return connection.query(`COPY products (title, description, rating) FROM '${filePath}' DELIMITER ',' CSV HEADER`)
+    console.log("============", filePath);
+    return connection.query(`copy products (title, description, rating) FROM '${filePath}' DELIMITER ',' CSV HEADER`)
   })
   .then(()=>{
-    console.log("insert data into images Table")
+    console.log("insert data into images table")
     const filePath = path.resolve( __dirname, '../dataGenerationPG/data/variations.csv')
-    return connection.query(`COPY images ("productId", cost, color, image) FROM '${filePath}' DELIMITER ',' CSV HEADER`)
+    return connection.query(`copy images ("productId", cost, color, image) FROM '${filePath}' DELIMITER ',' CSV HEADER`)
   })
   .then(()=>{
     return connection.query(`CREATE INDEX idx_images_productId ON images("productId")`)
