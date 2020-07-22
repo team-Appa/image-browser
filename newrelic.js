@@ -13,7 +13,7 @@ exports.config = {
   /**
    * Array of application names.
    */
-  app_name: "SDC",
+  app_name: process.env.NEWRELIC_NAME,
   /**
    * Your New Relic license key.
    */
