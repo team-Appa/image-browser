@@ -66,8 +66,8 @@ npm start
 ### API endpoints
 
 ```sh
-GET - http://localhost:3001/api/products?id=1  retrieves 1 product item by id <br />
-DELETE - http://localhost:3001/api/products?id=1 deletes 1 product item by id <br />
-PUT - http://localhost:3001/api/products?id=1 updates product by id per request body <br />
+GET - http://localhost:3001/api/products?id=1  retrieves 1 product item by id
+DELETE - http://localhost:3001/api/products?id=1 deletes 1 product item by id
+PUT - http://localhost:3001/api/products?id=1 updates product by id per request body
 POST - http://localhost:3001/api/products/ adds one product to end of db per request body
 ```
