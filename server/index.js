@@ -40,7 +40,7 @@ if (cluster.isMaster) {
   //cache middleware
   function cache(req,res, next){
     let id = req.query.id
-    console.log("id", id)
+
     client.get(id,(err, data)=>{
       if (err) throw err;
       if (data !== null){
@@ -82,6 +82,7 @@ if (cluster.isMaster) {
   })
 
   app.post('/api/products', (req, res) => {
+    console.log(req.body);
     let data = filterBody(req);
     connection.ProductsModel.create(data)
       .then((product)=>{
