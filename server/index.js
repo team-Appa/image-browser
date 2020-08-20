@@ -44,10 +44,8 @@ if (cluster.isMaster) {
     client.get(id,(err, data)=>{
       if (err) throw err;
       if (data !== null){
-        // console.log("called cache")
         res.send(data)
       } else{
-        // console.log("called get")
         get(req, res)
       }
     })
@@ -82,7 +80,6 @@ if (cluster.isMaster) {
   })
 
   app.post('/api/products', (req, res) => {
-    console.log(req.body);
     let data = filterBody(req);
     connection.ProductsModel.create(data)
       .then((product)=>{
