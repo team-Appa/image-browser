@@ -67,14 +67,6 @@ class ImageBrowser extends React.Component {
         // handle success
         //console.log(response.data[0]);
         const data = response.data[0];
-        console.log("dataaaaa", data)
-
-        console.log(data)
-        console.log(data.variations)
-        console.log(data.variations[0])
-        console.log(data.variations[0].images)
-        console.log(data.variations[0].images[this.state.imageIndex].src)
-        console.log("==================================================")
 
         this.setState({
           product: data,

@@ -1,6 +1,7 @@
 import React from 'react';
 import StarRatings from 'react-star-ratings';
 import styled from 'styled-components';
+import Faker from 'faker'
 
 const Header = styled.h1`
   font-family: 'Montserrat', sans-serif;
@@ -24,7 +25,7 @@ function Title(props) {
     <div>
       <Header>{props.product.title + ' ' + props.currentVariant.color}</Header>
       <ItemNum>
-        {'Item #: ' + props.product._id}
+        {'Item #: ' + Faker.random.uuid().substring(0,8)}
         <span>
           &nbsp;&nbsp;&nbsp;&nbsp;
           <StarRatings
