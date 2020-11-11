@@ -2,6 +2,10 @@
 
 > This module features functionality for a musical instrument e-commerce store's primary product information.
 
+![Alt text](github_images/imagebrowser1.png)
+![Alt text](github_images/imagebrowser2.png)
+
+
 ## Related Projects
 All Services for this page
   - Reviews https://github.com/Team-Katara/joel-service
